@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vibration Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.0.1/dist/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <h1>Engine vibration chart</h1>
+    <canvas id="vibrationChart" width="800" height="400"></canvas>
+
+    <script>
+      const socket = io(
+        'https://your-backend-service-url.ondigitalocean.app/socket.io/'
+      );
+
+      const ctx = document.getElementById('vibrationChart').getContext('2d');
+      const vibrationChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [
+            {
+              label: 'Vibration',
+              data: [],
+              borderWidth: 1,
+              fill: false,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            x: { title: { display: true, text: 'Time' } },
+            y: { title: { display: true, text: 'dB' } },
+          },
+        },
+      });
+
+      socket.on('vibration_update', (data) => {
+        vibrationChart.data.labels = [];
+        vibrationChart.data.datasets[0].data = [];
+
+        data.forEach((entry) => {
+          vibrationChart.data.labels.push(entry.timestamp);
+          vibrationChart.data.datasets[0].data.push(entry.value);
+        });
+
+        vibrationChart.update();
+      });
+    </script>
+  </body>
+</html>
