@@ -2,13 +2,11 @@ from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, emit
 from pymongo import MongoClient
 from datetime import datetime, timezone
-import os
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
-client = MongoClient(MONGO_URI)
+client = MongoClient("mongodb://mongo:27017/")
 db = client["vibration_db"]
 collection = db["vibrations"]
 

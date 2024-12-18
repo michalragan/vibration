@@ -1,0 +1,35 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - '5001:5001'
+    depends_on:
+      - mongo
+    networks:
+      - mynetwork
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - '3000:80'
+    depends_on:
+      - backend
+    networks:
+      - mynetwork
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    networks:
+      - mynetwork
+    volumes:
+      - mongodb_data:/data/db
+
+networks:
+  mynetwork:
+
+volumes:
+  mongodb_data:
