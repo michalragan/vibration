@@ -14,7 +14,7 @@ collection = db["vibrations"]
 def home():
     return "Flask backend works properly!", 200
 
-@app.route('/api/vibrations', methods=['POST'])
+@app.route('/vibrations', methods=['POST'])
 def receive_data():
     try:
         data = request.json
